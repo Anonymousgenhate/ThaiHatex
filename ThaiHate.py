@@ -71,7 +71,7 @@ def main():
     # # base = MultimodalBartModel.from_pretrained("facebook/bart-base")
     # # model = MultimodalBartForConditionalGeneration.from_pretrained('facebook/bart-base', config=base.config)
     # model.to(device).train()
-    df=pd.read_csv('hatespeech.csv')
+    df=pd.read_csv('dataset.csv')
     device = 'cuda' if cuda.is_available() else 'cpu'
     torch.cuda.set_device(0)
     torch.cuda.empty_cache()
@@ -82,7 +82,7 @@ def main():
     tokenizer = MBart50TokenizerFast.from_pretrained("facebook/mbart-large-50-many-to-many-mmt",
                                                      src_lang="th_TH",
                                                      tgt_lang="en_XX")
-
+    #Creating train,test and validation set
     x_train,x_test,y_train,y_test=train_test_split(df.index.to_list(),df.Hatespeech_Level.to_list(),test_size=0.20)
     x_train,x_val,y_train,y_val=train_test_split(x_train,y_train,test_size=0.10)
     
@@ -94,6 +94,7 @@ def main():
     traintext = traintext["Message"].tolist()
     task='hatx-hate-emo-sa'
     print('training for '+task+' ...')
+    #Creating train labels
     trainlabels = df.iloc[x_train]
     hate = trainlabels['hatx'].tolist()
     hs=trainlabels['Hatespeech_Level'].to_list()
@@ -117,7 +118,7 @@ def main():
     #     validtext = pickle.load(fp)
     # with open("validCMlabelAndSSAndSpan", "rb") as fp:
     #     validlabels = pickle.load(fp)
-
+    #Creating validatin labels
     validtext = df.iloc[x_val]
     validtext = validtext["Message"].tolist()
     validlabels =df.iloc[x_val]
@@ -201,7 +202,8 @@ def main():
     total_loss_co = []
     start = time.time()
     train_iter = iter(train_loader)
-    for step in range(1, 55001):
+    #Training phase
+    for step in range(1, 100001):
         print('current {}'.format(step))
 
         try:
@@ -225,6 +227,8 @@ def main():
         #     idx = tgt.ne(tokenizer.pad_token_id).sum(-1)
         #     loss_sc = cal_sc_loss(logits, idx, cls, tokenizer, opt.style)
         #     total_loss_sc.append(loss_sc.item())
+	
+	#Reinforcement learning incorporated
         if (10000 < step or len(train_loader)< step):
             # print('RL')
             idx = tgt.ne(tokenizer.pad_token_id).sum(-1)
@@ -265,7 +269,7 @@ def main():
 #         tab += 1
 #     if tab == opt.patience:
 #         exit()
-
+    #Creating labels for testing
     test_file = df.iloc[x_test]
     print('testing for '+task+' ...')
     post = test_file["Message"].tolist()
@@ -296,7 +300,7 @@ def main():
             preds.append('NO OUTPUT')
             print(c)
     df=pd.DataFrame({'original_'+task:label,'predicted_'+task:preds})
-    df.to_csv('90000'+'ep_'+task+'_acc.csv',index=False)
+    df.to_csv('100000'+'ep_'+task+'_acc.csv',index=False)
     print(len(preds))
 
 
