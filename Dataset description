@@ -1,0 +1,11 @@
+The given dataset is a subset of original subset contains 106 examples. 
+There are 8 columns in dataset and are described as follows:
+1. Message : Contains Thai message
+2. Message_Token : Contains tokenized words separated by '|'
+3. Message_Tagged : Contains tokenized words separated by '|' with '#' placed in front of rationales due to which the corresponding sentence is classified as hate speech. For Non hate speech sentences, the corresponding value is 'NaN'
+4. Hatespeech_Level : contains one of '-2','-1','0' and '1'. '-2' represents severe hatespeech, '-1' represents less severe hatespeech, '0' represents neutral speech and '1' represents positive speech.
+5. Hatespeech : Contains either one of 'Hatespeech' or 'Nonhatespeech'
+6. Sentiment : Contains one of 'Positive','Neutral' or 'Negative'
+7. hatx : contains space separated rationales 
+8. Emotion : Contains one of 'Anger', 'Anticipation', 'Others', 'Sadness', 'disagreeable', 'trust'
+
