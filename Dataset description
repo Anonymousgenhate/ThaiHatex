@@ -1,4 +1,4 @@
-The given dataset is a subset of original subset contains 106 examples. 
+Here, few samples of Ex-ThaiHate dataset is provided and contains 106 examples. The complete dataset will be provided once the paper is accepted.
 There are 8 columns in dataset and are described as follows:
 1. Message : Contains Thai message
 2. Message_Token : Contains tokenized words separated by '|'
